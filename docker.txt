@@ -1,0 +1,1 @@
+docker run --name axonserver -p 8024:8024 -p 8124:8124 -v "/home/milena/Projects/microservices/docker-data/data":/data -v "/home/milena/Projects/microservices/docker-data/eventdata":/eventdata -v "/home/milena/Projects/microservices/docker-data/config":/config axoniq/axonserver 
