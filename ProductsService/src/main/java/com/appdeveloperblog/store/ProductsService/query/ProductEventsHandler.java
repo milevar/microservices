@@ -42,7 +42,7 @@ public class ProductEventsHandler {
             ex.printStackTrace();
         }
 
-        if (true) throw new Exception("An error took place in ProductCreatedEvent @ProductCreatedEvent method");
+        //if (true) throw new Exception("An error took place in ProductCreatedEvent @ProductCreatedEvent method");
     }
 
     @EventHandler
