@@ -54,6 +54,13 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>com.appsdeveloperblog.store</groupId>
+			<artifactId>core</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
