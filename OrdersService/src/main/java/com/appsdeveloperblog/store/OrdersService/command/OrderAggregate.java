@@ -5,6 +5,9 @@
  */
 package com.appsdeveloperblog.store.OrdersService.command;
 
+import com.appsdeveloperblog.store.OrdersService.command.commands.ApproveOrderCommand;
+import com.appsdeveloperblog.store.OrdersService.command.commands.RejectOrderCommand;
+import com.appsdeveloperblog.store.OrdersService.core.events.OrderApprovedEvent;
 import com.appsdeveloperblog.store.OrdersService.core.events.OrderCreatedEvent;
 import com.appsdeveloperblog.store.OrdersService.core.model.OrderStatus;
 import com.appsdeveloperblog.store.OrdersService.command.commands.CreateOrderCommand;
@@ -38,7 +41,7 @@ public class OrderAggregate {
     }
 
     @EventSourcingHandler
-    public void on(OrderCreatedEvent orderCreatedEvent) throws Exception {
+    protected void on(OrderCreatedEvent orderCreatedEvent) throws Exception {
         this.orderId = orderCreatedEvent.getOrderId();
         this.productId = orderCreatedEvent.getProductId();
         this.userId = orderCreatedEvent.getUserId();
@@ -46,6 +49,22 @@ public class OrderAggregate {
         this.quantity = orderCreatedEvent.getQuantity();
         this.orderStatus = orderCreatedEvent.getOrderStatus();
     }
- 
+
+    @CommandHandler
+    public void handle(ApproveOrderCommand approveOrderCommand) {
+        // Creatye and publish the OrderApproved
+        OrderApprovedEvent orderApprovedEvent = new OrderApprovedEvent(approveOrderCommand.getOrderId());
+        AggregateLifecycle.apply(orderApprovedEvent);
+    }
+
+    @EventSourcingHandler
+    protected void on(OrderApprovedEvent orderApprovedEvent) {
+        this.orderStatus = orderApprovedEvent.getOrderStatus();
+    }
+
+    @CommandHandler
+    public void handle(RejectOrderCommand rejectOrderCommand) {
+
+    }
 
 }

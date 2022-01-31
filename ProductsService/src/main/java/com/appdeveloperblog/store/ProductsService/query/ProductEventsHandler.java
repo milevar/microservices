@@ -3,6 +3,7 @@ package com.appdeveloperblog.store.ProductsService.query;
 import com.appdeveloperblog.store.ProductsService.core.data.ProductEntity;
 import com.appdeveloperblog.store.ProductsService.core.data.ProductsRepository;
 import com.appdeveloperblog.store.ProductsService.core.events.ProductCreatedEvent;
+import com.appsdeveloperblog.store.core.events.ProductReservationCancelledEvent;
 import com.appsdeveloperblog.store.core.events.ProductReservedEvent;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.messaging.interceptors.ExceptionHandler;
@@ -46,12 +47,20 @@ public class ProductEventsHandler {
     }
 
     @EventHandler
-    public void on(ProductReservedEvent event) {
-        ProductEntity productEntity = productsRepository.findByProductId(event.getProductId());
-        productEntity.setQuantity(productEntity.getQuantity() - event.getQuantity());
+    public void on(ProductReservedEvent productReservedEvent) {
+        ProductEntity productEntity = productsRepository.findByProductId(productReservedEvent.getProductId());
+        productEntity.setQuantity(productEntity.getQuantity() - productReservedEvent.getQuantity());
         productsRepository.save(productEntity);
 
-        LOGGER.info("ProductReservedEvent handled for orderId: " + event.getOrderId() +
-                "and productId: " + event.getProductId());
+        LOGGER.info("ProductReservedEvent is called for orderId: " + productReservedEvent.getOrderId() +
+                "and productId: " + productReservedEvent.getProductId());
     }
+     @EventHandler
+    public void on(ProductReservationCancelledEvent productReservationCancelledEvent) {
+        ProductEntity currentlyStoredProduct = productsRepository.findByProductId(productReservationCancelledEvent.getProductId());
+        int newQuantity = currentlyStoredProduct.getQuantity() + productReservationCancelledEvent.getQuantity();
+        currentlyStoredProduct.setQuantity(newQuantity);
+
+        productsRepository.save(currentlyStoredProduct);
+     }
 }

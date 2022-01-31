@@ -20,7 +20,7 @@ import lombok.Data;
 @Table(name = "orders")
 public class OrderEntity implements Serializable {
 
-    private static final long serialVersionUID = 5313493413859894403L;
+    private static final long serialVersionUID = 6456852209602755439L;
 
     @Id
     @Column(unique = true)
