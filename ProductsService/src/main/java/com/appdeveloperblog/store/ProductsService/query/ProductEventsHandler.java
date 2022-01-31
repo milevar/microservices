@@ -49,8 +49,12 @@ public class ProductEventsHandler {
     @EventHandler
     public void on(ProductReservedEvent productReservedEvent) {
         ProductEntity productEntity = productsRepository.findByProductId(productReservedEvent.getProductId());
+        LOGGER.debug("ProductReservedEvent: current product quantity " + productEntity.getQuantity());
+
         productEntity.setQuantity(productEntity.getQuantity() - productReservedEvent.getQuantity());
         productsRepository.save(productEntity);
+
+        LOGGER.debug("ProductReservedEvent: new product quantity " + productEntity.getQuantity());
 
         LOGGER.info("ProductReservedEvent is called for orderId: " + productReservedEvent.getOrderId() +
                 "and productId: " + productReservedEvent.getProductId());
@@ -58,9 +62,13 @@ public class ProductEventsHandler {
      @EventHandler
     public void on(ProductReservationCancelledEvent productReservationCancelledEvent) {
         ProductEntity currentlyStoredProduct = productsRepository.findByProductId(productReservationCancelledEvent.getProductId());
+        LOGGER.debug("ProductReservedEvent: current product quantity " + productReservationCancelledEvent.getQuantity());
+
         int newQuantity = currentlyStoredProduct.getQuantity() + productReservationCancelledEvent.getQuantity();
         currentlyStoredProduct.setQuantity(newQuantity);
 
         productsRepository.save(currentlyStoredProduct);
+
+        LOGGER.debug("ProductReservedEvent: new product quantity " + productReservationCancelledEvent.getQuantity());
      }
 }

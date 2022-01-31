@@ -9,6 +9,7 @@ import com.appsdeveloperblog.store.OrdersService.command.commands.ApproveOrderCo
 import com.appsdeveloperblog.store.OrdersService.command.commands.RejectOrderCommand;
 import com.appsdeveloperblog.store.OrdersService.core.events.OrderApprovedEvent;
 import com.appsdeveloperblog.store.OrdersService.core.events.OrderCreatedEvent;
+import com.appsdeveloperblog.store.OrdersService.core.events.OrderRejectedEvent;
 import com.appsdeveloperblog.store.OrdersService.core.model.OrderStatus;
 import com.appsdeveloperblog.store.OrdersService.command.commands.CreateOrderCommand;
 import org.axonframework.commandhandling.CommandHandler;
@@ -64,7 +65,10 @@ public class OrderAggregate {
 
     @CommandHandler
     public void handle(RejectOrderCommand rejectOrderCommand) {
+        OrderRejectedEvent orderRejectedEvent = new OrderRejectedEvent(rejectOrderCommand.getOrderId(),
+                rejectOrderCommand.getReason());
 
+        AggregateLifecycle.apply(orderRejectedEvent);
     }
 
 }

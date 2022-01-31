@@ -4,6 +4,7 @@ import com.appsdeveloperblog.store.OrdersService.command.commands.ApproveOrderCo
 import com.appsdeveloperblog.store.OrdersService.command.commands.RejectOrderCommand;
 import com.appsdeveloperblog.store.OrdersService.core.events.OrderApprovedEvent;
 import com.appsdeveloperblog.store.OrdersService.core.events.OrderCreatedEvent;
+import com.appsdeveloperblog.store.OrdersService.core.events.OrderRejectedEvent;
 import com.appsdeveloperblog.store.core.commands.CancelProductReservationCommand;
 import com.appsdeveloperblog.store.core.commands.ProcessPaymentCommand;
 import com.appsdeveloperblog.store.core.commands.ReserveProductCommand;
@@ -155,5 +156,12 @@ public class OrderSaga {
                 productReservationCancelledEvent.getReason());
 
         commandGateway.send(rejectOrderCommand);
+    }
+
+    @EndSaga
+    @SagaEventHandler(associationProperty = "orderId")
+    public void handle(OrderRejectedEvent orderRejectedEvent) {
+        LOGGER.info("Successfully rejected order with Id: " + orderRejectedEvent.getOrderId());
+
     }
 }
